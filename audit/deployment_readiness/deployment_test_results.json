@@ -1,0 +1,206 @@
+{
+  "assessment_date": "2026-10-29",
+  "workspace": "E:\\TruthLensAI",
+  "overall_status": "READY_FOR_GITHUB_CI_VALIDATION_NOT_DEPLOYMENT",
+  "repository_state": {
+    "branch": "master",
+    "has_commits": false,
+    "tracked_files": 0,
+    "staged_files": 0,
+    "project_files_untracked": true,
+    "staging_commit_remote_or_push_performed": false
+  },
+  "checks": [
+    {
+      "name": "backend_compile",
+      "status": "PASS",
+      "command": "python -m compileall -q backend",
+      "result_summary": "Python 3.12.7 compiled the backend modules; exit code 0.",
+      "failure_details": null,
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "focused_provider_verdict_ssrf_regressions",
+      "status": "PASS",
+      "command": "python -m pytest backend/tests/test_backend.py -q -k 'SourceFetcherValidation or FetchedPageEvidence or VerdictEngine or ScamDetector or explicit_none_order or noop_entry or configuration_error or configuration_of_provider_order or tavily_skipped_when_key_missing or serper_key_missing_uses_duckduckgo_directly or serper_fails_and_duckduckgo_succeeds or provider_fallback_tavily_to_serper or provider_fallback_to_duckduckgo or no_api_keys_hardcoded'",
+      "result_summary": "62 passed, 142 deselected, 11 subtests passed in 2.06s. Tests use mocked providers/DNS/HTTP; no live service or private address was contacted.",
+      "failure_details": null,
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "analysis_rate_limiter",
+      "status": "PASS",
+      "command": "python -m pytest backend/tests/test_production_security.py -q -k analysis_limit",
+      "result_summary": "1 passed, 6 deselected. Confirms the per-process limit response behavior.",
+      "failure_details": null,
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "frontend_lint",
+      "status": "PASS",
+      "command": "npm run lint (working directory: frontend)",
+      "result_summary": "oxlint exited with code 0.",
+      "failure_details": null,
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "frontend_typescript_production_build",
+      "status": "PASS",
+      "command": "npm run build (working directory: frontend)",
+      "result_summary": "tsc -b and Vite build exited with code 0; 1,994 modules transformed.",
+      "failure_details": null,
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "linux_ci_yaml_parse",
+      "status": "PASS",
+      "command": "python -c \"import yaml; yaml.safe_load(open('.github/workflows/ci.yml', encoding='utf-8')); print('CI YAML parsed')\"",
+      "result_summary": "Workflow YAML parsed. GitHub Actions execution is not implied.",
+      "failure_details": null,
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "complete_backend_suite",
+      "status": "BLOCKED",
+      "command": "python -m pytest backend/tests -q -o faulthandler_timeout=8",
+      "result_summary": "Partial progress reached 28%; suite did not complete and is not counted as passing or failing.",
+      "failure_details": "Hangs at TestAPIHealth.test_health_response_fields before request handling. Faulthandler stack: socket.accept -> _fallback_socketpair -> ProactorEventLoop -> asyncio.run -> backend/tests/asgi_test_client.py:29. This sandbox's Windows asyncio Proactor socketpair setup stalls. The process was interrupted.",
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "broader_non_api_backend_selection",
+      "status": "BLOCKED",
+      "command": "python -m pytest backend/tests/test_backend.py -q -k 'not TestAPI and not pytest_health and not pytest_analyze'",
+      "result_summary": "Partial progress then stalled; interrupted. Do not count this subset as passing.",
+      "failure_details": "The deterministic narrower regression selection completed successfully; this broader run exposed another environment stall whose exact test was not captured.",
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "supabase_token_and_protected_route_tests",
+      "status": "NOT_VERIFIED",
+      "command": "python -m pytest backend/tests/test_production_security.py -q (full suite not completed)",
+      "result_summary": "Deterministic tests exist for missing, invalid, expired, and valid tokens and unauthenticated analysis rejection; async request tests did not complete locally.",
+      "failure_details": "No live Supabase token validation was exercised. Run the complete auth tests in Linux CI and verify the real project in staging.",
+      "independently_verified": false,
+      "external_credentials_or_network_required": true
+    },
+    {
+      "name": "environment_ignore_rules",
+      "status": "PASS",
+      "command": "git check-ignore -v -- backend/.env frontend/.env",
+      "result_summary": "Both local environment files were ignored by their nested .gitignore files; no values printed.",
+      "failure_details": null,
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "source_secret_pattern_scan",
+      "status": "PASS",
+      "command": "PowerShell/rg pattern scan excluding local .env and generated output; matching paths classified without displaying values",
+      "result_summary": "No credential values were found in source/config. Three hits were test lines referencing SERPER_API_KEY in setup/assertions, not key material. Scan patterns cannot detect every possible secret format.",
+      "failure_details": null,
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "git_tracked_and_staged_inventory",
+      "status": "PASS",
+      "command": "git ls-files; git diff --cached --name-only; git status --short",
+      "result_summary": "No tracked or staged files; the repository has no commits and project files are untracked. No stage/commit/remote/push was performed.",
+      "failure_details": null,
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "local_env_credential_inventory",
+      "status": "PASS",
+      "command": "PowerShell parsed local env variable names and reported set/unset booleans only",
+      "result_summary": "backend/.env contains a configured SERPER_API_KEY; frontend publishable Supabase configuration is populated. Secret values were not printed. Both env files are ignored.",
+      "failure_details": "Credential values were deliberately not inspected in output. Rotation is recommended if a key was ever exposed outside ignored local configuration.",
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "uvicorn_local_health",
+      "status": "BLOCKED",
+      "command": "Local Uvicorn bind and GET /api/health attempted in prior readiness work",
+      "result_summary": "No live health response could be obtained.",
+      "failure_details": "Sandbox denied local socket bind/access permissions.",
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "docker_build_and_container_health",
+      "status": "BLOCKED",
+      "command": "docker --version (Docker build not attempted)",
+      "result_summary": "Docker executable is not available in this environment.",
+      "failure_details": "Image contents, container startup, non-root process and health check remain unverified locally; CI is configured to test them on Linux.",
+      "independently_verified": true,
+      "external_credentials_or_network_required": false
+    },
+    {
+      "name": "python_dependency_lock_generation",
+      "status": "BLOCKED",
+      "command": "uv pip compile backend/requirements.txt --python-version 3.12 --universal --generate-hashes --output-file backend/requirements.lock (with cache redirected inside workspace)",
+      "result_summary": "No lockfile generated.",
+      "failure_details": "PyPI DNS resolution failed while retrieving package metadata. Existing Python requirement ranges remain not exactly pinned/hash-locked.",
+      "independently_verified": true,
+      "external_credentials_or_network_required": true
+    },
+    {
+      "name": "live_supabase_google_oauth",
+      "status": "NOT_VERIFIED",
+      "command": "No live OAuth flow executed",
+      "result_summary": "Code path preserved; backend token verification requires Supabase project config. Live login/session/analysis was not tested.",
+      "failure_details": "Requires external network and configured Supabase/Google project.",
+      "independently_verified": false,
+      "external_credentials_or_network_required": true
+    },
+    {
+      "name": "live_search_providers",
+      "status": "NOT_VERIFIED",
+      "command": "No live Serper, Tavily, or DuckDuckGo requests issued",
+      "result_summary": "Provider selection/fallback logic was verified with deterministic mocks; live service response and current credentials are unverified.",
+      "failure_details": "Requires external network and provider credentials where applicable.",
+      "independently_verified": false,
+      "external_credentials_or_network_required": true
+    },
+    {
+      "name": "deployment_to_vercel_or_aws",
+      "status": "NOT_VERIFIED",
+      "command": "No cloud resources created or deployment performed",
+      "result_summary": "Deployment configuration is documented only.",
+      "failure_details": "Requires deployment account/configuration and separate authorization.",
+      "independently_verified": false,
+      "external_credentials_or_network_required": true
+    }
+  ],
+  "files_changed_this_turn": [
+    ".gitignore",
+    ".dockerignore",
+    ".env.example",
+    "docker-compose.yml",
+    ".github/workflows/ci.yml",
+    "backend/config.py",
+    "backend/services/evidence_retriever.py",
+    "backend/services/source_fetcher.py",
+    "backend/.env.example",
+    "backend/tests/test_backend.py",
+    "backend/tests/e2e_live_integration.py",
+    "README.md",
+    "manual_tests/README.md",
+    "manual_tests/claim_evidence_smoke.py",
+    "manual_tests/live_api_smoke.py",
+    "audit/deployment_readiness/deployment_readiness_report.md",
+    "audit/deployment_readiness/deployment_checklist.md",
+    "audit/deployment_readiness/deployment_test_results.json"
+  ]
+}

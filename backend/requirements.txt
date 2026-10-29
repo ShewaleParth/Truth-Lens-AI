@@ -1,0 +1,23 @@
+# TruthLens AI - Backend Dependencies (Phase 2)
+# All versions are explicit and compatible with Python 3.12.
+# Machine-learning frameworks and paid AI-provider SDKs are not included.
+
+# Core web framework
+fastapi>=0.115.0,<1.0.0
+uvicorn[standard]>=0.30.0,<1.0.0
+
+# Data validation and settings management
+pydantic>=2.8.0,<3.0.0
+pydantic-settings>=2.4.0,<3.0.0
+
+# HTTP client (used by source_fetcher, evidence_retriever, and tests)
+httpx>=0.27.0,<1.0.0
+# Public HTTP Core network-backend API used to pin validated DNS addresses.
+httpcore>=1.0.0,<2.0.0
+
+# HTML parsing for source content extraction
+beautifulsoup4>=4.12.0,<5.0.0
+lxml>=5.0.0,<6.0.0
+
+# Testing
+pytest>=8.0.0,<9.0.0

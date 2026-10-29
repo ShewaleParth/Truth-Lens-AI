@@ -1,0 +1,21 @@
+services:
+  truthlens-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:?Set VITE_SUPABASE_URL in the root .env for the frontend build}
+        VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY:?Set VITE_SUPABASE_PUBLISHABLE_KEY in the root .env for the frontend build}
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      ENVIRONMENT: production
+      DEBUG: "false"
+      HOST: 0.0.0.0
+      PORT: "8000"
+      SEARCH_PROVIDER_ORDER: ${SEARCH_PROVIDER_ORDER:-serper,duckduckgo}
+    env_file:
+      - path: ./backend/.env
+        required: false
